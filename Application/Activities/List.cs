@@ -1,9 +1,7 @@
 ﻿using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Persistence;
-using System.Threading;
 
 namespace Application.Activities;
 
