@@ -31,8 +31,8 @@ public class PhotoAccessor : IPhotoAccessor
         await using var stream = file.OpenReadStream();
         var uploadParams = new ImageUploadParams
         {
-            File = new FileDescription(file.FileName, stream),
-            Folder = "Reactivities",
+            File = new FileDescription(file.FileName, stream),            
+            //Folder = "Reactivities",
             Transformation = new Transformation().Height(500).Width(500).Crop("fill")
         };
 
