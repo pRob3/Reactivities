@@ -35,6 +35,12 @@ namespace Application.Photos
 
                 if(user == null) return null;
 
+                if(request.File == null){
+                    return Result<Photo>.Failure("Problem becuse no file was sent");
+                }
+
+                //var folderPath = "Reactivities/";
+
                 var photoUploadResult = await _photoAccessor.AddPhoto(request.File);
 
                 var photo = new Photo
