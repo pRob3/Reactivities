@@ -49,6 +49,9 @@ public static class ApplicationServiceExtensions
         // Cloudinary
         services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
+        // SignalR
+        services.AddSignalR();
+
         return services;
     }
 }
