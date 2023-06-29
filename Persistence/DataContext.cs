@@ -51,5 +51,10 @@ public class DataContext : IdentityDbContext<AppUser>
                 .HasForeignKey(o => o.TargetId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        builder.Entity<RefreshToken>()
+            .HasOne(a => a.AppUser)
+            .WithMany(c => c.RefreshTokens)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

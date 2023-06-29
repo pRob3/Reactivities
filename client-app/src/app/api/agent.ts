@@ -6,6 +6,7 @@ import { store } from '../stores/store';
 import { User, UserFormValues } from '../models/user';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
+import { stat } from 'fs';
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -42,7 +43,7 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    const { data, status, config } = error.response as AxiosResponse;
+    const { data, status, config, headers } = error.response as AxiosResponse;
     switch (status) {
       case 400:
         if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
@@ -61,7 +62,15 @@ axios.interceptors.response.use(
         }
         break;
       case 401:
-        toast.error('unauthorized');
+        if (
+          status === 401 &&
+          headers['www-authenticate']?.startsWith(
+            'Bearer error="invalid_token"'
+          )
+        ) {
+          store.userStore.logout();
+          toast.error('Session expired - please login again');
+        }
         break;
       case 403:
         toast.error('forbidden');
@@ -105,6 +114,7 @@ const Account = {
   login: (user: UserFormValues) => requests.post<User>('/account/login', user),
   register: (user: UserFormValues) =>
     requests.post<User>('/account/register', user),
+  refreshToken: () => requests.post<User>('/account/refreshToken', {}),
 };
 
 const Profiles = {
