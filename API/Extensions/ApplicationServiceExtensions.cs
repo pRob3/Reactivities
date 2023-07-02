@@ -1,12 +1,11 @@
 ﻿using Application.Activities;
 using Application.Core;
 using Application.Interfaces;
-using Application.Photos;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Email;
 using Infrastructure.Photos;
 using Infrastructure.Security;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -37,7 +36,8 @@ public static class ApplicationServiceExtensions
                 .WithOrigins("http://localhost:3000");
             });
         });
-        services.AddMediatR(typeof(List.Handler));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<List.Handler>());
+
         services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
         // Fluent validation
@@ -50,6 +50,9 @@ public static class ApplicationServiceExtensions
 
         // Photos
         services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+        // SendGrid
+        services.AddScoped<EmailSender>();
 
         // Cloudinary
         services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));

@@ -115,6 +115,13 @@ const Account = {
   register: (user: UserFormValues) =>
     requests.post<User>('/account/register', user),
   refreshToken: () => requests.post<User>('/account/refreshToken', {}),
+  verifyEmail: (token: string, email: string) =>
+    requests.post<void>(
+      `/account/verifyEmail?token=${token}&email=${email}`,
+      {}
+    ),
+  resendEmailConfirm: (email: string) =>
+    requests.get<void>(`/account/resendEmailVerification?email=${email}`),
 };
 
 const Profiles = {
