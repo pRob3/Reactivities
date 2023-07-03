@@ -6,7 +6,6 @@ import { store } from '../stores/store';
 import { User, UserFormValues } from '../models/user';
 import { Photo, Profile, UserActivity } from '../models/profile';
 import { PaginatedResult } from '../models/pagination';
-import { stat } from 'fs';
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -43,7 +42,12 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
+    if (error.message === 'Network Error' && !error.response) {
+      toast.error('Network error - The API is down!');
+      return Promise.reject(error);
+    }
     const { data, status, config, headers } = error.response as AxiosResponse;
+    console.log(data);
     switch (status) {
       case 400:
         if (config.method === 'get' && data.errors.hasOwnProperty('id')) {

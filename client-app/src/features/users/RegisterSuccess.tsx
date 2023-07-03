@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import agent from '../../app/api/agent';
 import useQuery from '../../app/util/hooks';
-import { Header, Icon } from 'semantic-ui-react';
+import { Button, Header, Icon } from 'semantic-ui-react';
 
 export default function RegisterSuccess() {
   const email = useQuery().get('email') as string;
@@ -24,10 +24,15 @@ export default function RegisterSuccess() {
         email.
       </p>
       {email && (
-        <p>
-          Didn't receive the email? Click{' '}
-          <a onClick={handleConfirmEmailResend}>here</a> to resend.
-        </p>
+        <>
+          <p>Didn't receive the email? Click the below button to resend</p>
+          <Button
+            primary
+            onClick={handleConfirmEmailResend}
+            content='Resend email'
+            size='huge'
+          />
+        </>
       )}
     </>
   );
